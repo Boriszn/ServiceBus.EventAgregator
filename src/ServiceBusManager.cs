@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using ServiceBusTopics;
 
-namespace ServiceBusTopics
+namespace ServiceBus.EventAgregator
 {
     /// <summary>
     /// 
@@ -21,7 +22,7 @@ namespace ServiceBusTopics
             serviceBusSettings = config.Value;
         }
 
-        public async Task RegisterOnReceiveMessages(string subscription, Dictionary<string, Func<Message, bool>> subscriptionToLabeHandler, CancellationToken cancellationToken)
+        public async Task RegisterOnReceiveMessages(string subscription, Dictionary<string, Func<Message, bool>> subscriptionToLabelHandler, CancellationToken cancellationToken)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
             var subscriptionClient = GetSubscriptionClient(subscription);
@@ -43,9 +44,7 @@ namespace ServiceBusTopics
                 // Process the message
                 Console.WriteLine($"Received message: SequenceNumber:{message.Label} | SequenceNumber:{message.SystemProperties.SequenceNumber} | Body:{Encoding.UTF8.GetString(message.Body)}");
 
-                GetBody(message);
-
-                subscriptionToLabeHandler[message.Label](message);
+                subscriptionToLabelHandler[message.Label](message);
 
                 // Complete the message so that it is not received again.
                 await subscriptionClient.CompleteAsync(message.SystemProperties.LockToken);
@@ -86,12 +85,6 @@ namespace ServiceBusTopics
         private SubscriptionClient GetSubscriptionClient(string subscription)
         {
             return new SubscriptionClient(serviceBusSettings.ConnectionString, serviceBusSettings.TopicName, subscription);
-        }
-
-        private static void GetBody(Message message)
-        {
-            var text = Encoding.UTF8.GetString(message.Body);
-            var data = JsonConvert.DeserializeObject(text);
         }
 
         private static void RegisterCancellationToken(CancellationToken cancellationToken, SubscriptionClient subscription, TaskCompletionSource<bool> doneReceiving)

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 using ServiceBusTopics;
 
 namespace ServiceBus.EventAgregator
@@ -57,6 +59,8 @@ namespace ServiceBus.EventAgregator
         /// <returns></returns>
         public bool DoFirstHandler(Message message)
         {
+            var data = GetMessageBody(message);
+
             return true;
         }
 
@@ -67,7 +71,15 @@ namespace ServiceBus.EventAgregator
         /// <returns></returns>
         public bool DoSecondHandler(Message message)
         {
+            var data = GetMessageBody(message);
+
             return true;
+        }
+
+        private static object GetMessageBody(Message message)
+        {
+            string text = Encoding.UTF8.GetString(message.Body);
+            return JsonConvert.DeserializeObject(text);
         }
     }
 }

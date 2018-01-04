@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceBus.EventAgregator;
+using ServiceBusTopics;
 
-namespace ServiceBusTopics
+namespace ServiceBus.EventAgregator
 {
     class Program
     {

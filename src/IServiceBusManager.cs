@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 
-namespace ServiceBusTopics
+namespace ServiceBus.EventAgregator
 {
     /// <summary>
     /// 
@@ -15,15 +15,14 @@ namespace ServiceBusTopics
         /// Registers the on receive messages.
         /// </summary>
         /// <param name="subscription">The subscription.</param>
-        /// <param name="subscriptionToLabeHandler">The subscription to labe handler.</param>
+        /// <param name="subscriptionToLabelHandler">The subscription to labe handler.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task RegisterOnReceiveMessages(string subscription, Dictionary<string, Func<Message, bool>> subscriptionToLabeHandler, CancellationToken cancellationToken);
+        Task RegisterOnReceiveMessages(string subscription, Dictionary<string, Func<Message, bool>> subscriptionToLabelHandler, CancellationToken cancellationToken);
 
         /// <summary>
         /// Sends the message.
         /// </summary>
-        /// <param name="numMessagesToSend">The number messages to send.</param>
         /// <param name="label">The label.</param>
         /// <param name="messageContent">Content of the message.</param>
         /// <returns></returns>
