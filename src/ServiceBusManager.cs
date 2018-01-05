@@ -10,9 +10,7 @@ using ServiceBusTopics;
 
 namespace ServiceBus.EventAgregator
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc/>
     public class ServiceBusManager : IServiceBusManager
     {
         private readonly ServiceBusSettings serviceBusSettings;
@@ -22,21 +20,24 @@ namespace ServiceBus.EventAgregator
             serviceBusSettings = config.Value;
         }
 
+        // Configure the MessageHandler Options in terms of exception handling, number of concurrent messages to deliver etc.
+        private MessageHandlerOptions MessageHandlerOptions => new MessageHandlerOptions(ExceptionReceivedHandler)
+        {
+            MaxConcurrentCalls = 1,
+            
+            // Indicates whether MessagePump should automatically complete the messages after returning from User Callback.
+            AutoComplete = false,
+        };
+
+        /// <inheritdoc/>
         public async Task RegisterOnReceiveMessages(string subscription, Dictionary<string, Func<Message, bool>> subscriptionToLabelHandler, CancellationToken cancellationToken)
         {
             var taskCompletionSource = new TaskCompletionSource<bool>();
-            var subscriptionClient = GetSubscriptionClient(subscription);
+            SubscriptionClient subscriptionClient = GetSubscriptionClient(subscription);
 
             RegisterCancellationToken(cancellationToken, subscriptionClient, taskCompletionSource);
 
-            // Configure the MessageHandler Options in terms of exception handling, number of concurrent messages to deliver etc.
-            var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
-            {
-                MaxConcurrentCalls = 1,
-
-                // Indicates whether MessagePump should automatically complete the messages after returning from User Callback.
-                AutoComplete = false,
-            };
+            var messageHandlerOptions = MessageHandlerOptions;
 
             // Register the function that will process messages
             subscriptionClient.RegisterMessageHandler(async (message, token) =>
@@ -54,16 +55,14 @@ namespace ServiceBus.EventAgregator
             await taskCompletionSource.Task;
         }
 
+        /// <inheritdoc/>
         public async Task SendMessage(string label, string messageContent)
         {
             try
             {
                 var topicClient = new TopicClient(serviceBusSettings.ConnectionString, serviceBusSettings.TopicName);
 
-                byte[] messageData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messageContent));
-
-                // Write the body of the message to the console
-                Console.WriteLine($"Sending message: {label} | {Encoding.UTF8.GetString(messageData)}");
+                var messageData = GetMessageContent(label, messageContent);
 
                 var message = new Message
                 {
@@ -80,6 +79,16 @@ namespace ServiceBus.EventAgregator
             {
                 Console.WriteLine($"{DateTime.Now} > Exception: {exception.Message}");
             }
+        }
+
+        private static byte[] GetMessageContent(string label, string messageContent)
+        {
+            byte[] messageData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(messageContent));
+
+            // Write the body of the message to the console
+            Console.WriteLine($"Sending message: {label} | {Encoding.UTF8.GetString(messageData)}");
+
+            return messageData;
         }
 
         private SubscriptionClient GetSubscriptionClient(string subscription)

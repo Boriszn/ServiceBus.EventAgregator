@@ -10,7 +10,7 @@ namespace ServiceBus.EventAgregator
     class Program
     {
         /// <summary>
-        /// Mains the specified arguments.
+        /// Entry point
         /// </summary>
         /// <param name="args">The arguments.</param>
         private static void Main(string[] args)
@@ -62,7 +62,6 @@ namespace ServiceBus.EventAgregator
         {
             string label1 = "First";
             string json1 = @"{'Name':'James'}";
-
 
             string label2 = "Second";
             string json2 = @"{'Name':'James'}";

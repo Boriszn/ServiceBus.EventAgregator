@@ -7,7 +7,8 @@ using Microsoft.Azure.ServiceBus;
 namespace ServiceBus.EventAgregator
 {
     /// <summary>
-    /// 
+    /// The Service Bus manager contains logic for Subscribing on messages and Send messages
+    /// TODO: NOTICE: Works with service bus topics. Logic to work with Queues will be added later.
     /// </summary>
     public interface IServiceBusManager
     {
