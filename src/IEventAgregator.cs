@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 
-namespace ServiceBusTopics
+namespace ServiceBus.EventAgregator
 {
     /// <summary>
-    /// 
+    /// Contains logic to trigger event listening And logic to asign event subscribers 
     /// </summary>
+    /// <seealso cref="IEventAgregator" />
     public interface IEventAgregator
     {
         /// <summary>
@@ -14,14 +15,13 @@ namespace ServiceBusTopics
         Task StartAgregating();
 
         /// <summary>
-        /// Firsts the handler.
+        /// First message handler example.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <returns></returns>
         bool DoFirstHandler(Message message);
 
         /// <summary>
-        /// Does the second handler.
+        /// Second message handler example.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns></returns>
