@@ -1,0 +1,5 @@
+.vs/
+src/bin/
+src/obj/
+test/ServiceBus.EventAgregator.Tests/bin/
+test/ServiceBus.EventAgregator.Tests/obj/
