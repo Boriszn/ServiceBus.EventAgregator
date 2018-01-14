@@ -1,6 +1,8 @@
 # ServiceBus EventAgregator
 
-Logic container for collecting events and decouple Publisher/Sender and Subscriber logic and use it independently. Based on Azure Service Bus. The project's idea based on [Martin Fowler Event Agregator Pattern](https://martinfowler.com/eaaDev/EventAggregator.html)
+Logic container for collecting events and decouple Publisher/Sender and Subscriber logic and use it independently. Based on Azure Service Bus. 
+
+The project inspired by [Martin Fowler Event Agregator Pattern](https://martinfowler.com/eaaDev/EventAggregator.html)
 
 ## Installation
 
