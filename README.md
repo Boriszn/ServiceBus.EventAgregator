@@ -1,6 +1,6 @@
 # ServiceBus EventAgregator
 
-Logic container for collecting events and decouple Publisher/Sender and Subscriber logic and use it independently. Based on Azure Service Bus. 
+Logic container for collecting events and decouple Publisher/Subscriber logic and use it independently. Intended for Azure Service Bus. (In the future will be integrated with RabbitMQ, see Todo)
 
 The project inspired by [Martin Fowler Event Agregator Pattern](https://martinfowler.com/eaaDev/EventAggregator.html)
 
