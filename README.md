@@ -2,6 +2,11 @@
 
 Logic container for collecting events and decouple Publisher/Sender and Subscriber logic and use it independently. Based on Azure Service Bus. The project's idea based on [Martin Fowler Event Agregator Pattern](https://martinfowler.com/eaaDev/EventAggregator.html)
 
+## Related options
+
+* [MediatR](https://github.com/jbogard/MediatR)
+* [Brighter](https://brightercommand.github.io/Brighter/)
+
 ## Installation
 
 1. Clone repository
