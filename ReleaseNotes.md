@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## Unreleased
+## 1.1.0
 
 - [SB-5] Update Readme, add ReleaseNotes, Cleanup / refactoring;
 
