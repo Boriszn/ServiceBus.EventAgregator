@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ServiceBusTopics;
+using ServiceBus.EventAgregator.Configuration;
 
 namespace ServiceBus.EventAgregator
 {
@@ -15,40 +13,26 @@ namespace ServiceBus.EventAgregator
         /// <param name="args">The arguments.</param>
         private static void Main(string[] args)
         {
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            // Endpoint
-            MainAsync(args, serviceProvider).GetAwaiter().GetResult();
-        }
-
-        private static void ConfigureServices(IServiceCollection serviceCollection)
-        {
-            // Add IoC configuration
-            serviceCollection.AddScoped<IServiceBusManager, ServiceBusManager>();
-            serviceCollection.AddScoped<IEventAgregator, EventAgregator>();
-
-            // Add file configuration options
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
-
-            serviceCollection.AddOptions();
-            serviceCollection.Configure<ServiceBusSettings>(configuration.GetSection("connectionStrings:serviceBus"));
+            // Bootstraps application configuration and Run Main async entry point
+            MainAsync(args, 
+                Statup.ConfigureServices())
+                .GetAwaiter()
+                .GetResult();
         }
 
         private static async Task MainAsync(string[] args, IServiceProvider serviceProvider)
         {
             var serviceBusManager = serviceProvider.GetService<IServiceBusManager>();
 
+            // 1. Start listening and Aggregating messages
             await AggregateMessages(serviceProvider);
 
+            // 2. Sends Test messages to different handlers (with different labels)
             await SendMessages(serviceBusManager);
 
+            // 3. Wait a bit and show message to console
             await Task.Delay(5);
-            Console.WriteLine($" Messages sent."); 
+            Console.WriteLine($" Messages sent.");
 
             Console.ReadKey();
 
@@ -77,7 +61,10 @@ namespace ServiceBus.EventAgregator
         {
             var eventAgregator = serviceProvider.GetService<IEventAgregator>();
 
-            await Task.Factory.StartNew(async () => { await eventAgregator.StartAgregating(); });
+            await Task.Factory.StartNew(async () =>
+            {
+                await eventAgregator.StartAgregating();
+            });
         }
     }
 }
