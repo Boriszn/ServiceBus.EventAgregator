@@ -5,14 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
-using ServiceBusTopics;
 
 namespace ServiceBus.EventAgregator
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <seealso cref="ServiceBusTopics.IEventAgregator" />
+    /// <inheritdoc />
     public class EventAgregator : IEventAgregator
     {
         private const string Subscription = "SubSetTest";
@@ -21,8 +17,12 @@ namespace ServiceBus.EventAgregator
         private CancellationToken cancellationToken;
 
         /// <summary>
-        /// Gets the subscription to label funcs.
+        /// Get and creates Message Subscribers configuration
+        /// Notice: configuration based on labels. See example below
         /// </summary>
+        /// <example>
+        /// { "Label", MessageHandler },
+        /// </example>
         /// <value>
         /// The subscription to label funcs.
         /// </value>
@@ -53,24 +53,26 @@ namespace ServiceBus.EventAgregator
         }
 
         /// <summary>
-        /// Firsts the handler.
+        /// First message handler example.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns></returns>
         public bool DoFirstHandler(Message message)
         {
+            // Get message body example
             var data = GetMessageBody(message);
 
             return true;
         }
 
         /// <summary>
-        /// Does the second handler.
+        /// Second message handler example.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <returns></returns>
         public bool DoSecondHandler(Message message)
         {
+            // Get message body example
             var data = GetMessageBody(message);
 
             return true;
@@ -79,6 +81,7 @@ namespace ServiceBus.EventAgregator
         private static object GetMessageBody(Message message)
         {
             string text = Encoding.UTF8.GetString(message.Body);
+
             return JsonConvert.DeserializeObject(text);
         }
     }
