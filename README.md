@@ -6,7 +6,7 @@ The project inspired by [Martin Fowler Event Aggregator Pattern](https://martinf
 
 ## Architecture overview
 
-![alt text](https://raw.githubusercontent.com/Boriszn/ServiceBus.EventAgregator/feature/SB-5-Update-Readme-Add-ReleaseNotes/assets/img/EventAggregator-Architecture.png "Logo Title Text 1")
+![alt text](https://raw.githubusercontent.com/Boriszn/ServiceBus.EventAgregator/develop/assets/img/EventAggregator-Architecture.png "Logo Title Text 1")
 
 * *Main entry point* - Bootstraps application configuration, Runs event aggregation, Sends tests messages
 * *Event Aggregator* - [Key Component] Starts message aggregating process and Contains configuration for Event labels to Event handlers
